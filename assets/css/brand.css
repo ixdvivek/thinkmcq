@@ -31,7 +31,8 @@
   --green:#28A745;       /* Vitalize — WhatsApp contact */
 
   --panel-2:#DBDDDF;
-  --radius:6px;
+  --radius:6px;        /* containers: cards, fields, media */
+  --radius-pill:999px; /* interactive: buttons, chips, badges */
 
   --font-display:'Montserrat',"Helvetica Neue",Arial,sans-serif;
   --font-body:'Lato',"Helvetica Neue",Arial,sans-serif;
@@ -89,13 +90,13 @@ button,select{font-family:inherit;}
 .top-actions{display:flex;align-items:center;gap:18px;font-size:12px;font-weight:700;font-family:var(--font-display);}
 .top-actions .login:hover{color:var(--red);}
 .cart-box{
-  border:1px solid var(--line);border-radius:var(--radius);
-  padding:6px 12px;font-size:11px;font-weight:700;color:var(--ink);
+  border:1px solid var(--line);border-radius:var(--radius-pill);
+  padding:6px 14px;font-size:11px;font-weight:700;color:var(--ink);
 }
 .cart-box:hover{border-color:var(--red);color:var(--red);}
 .nav-toggle{
-  display:none;border:1px solid var(--line);border-radius:var(--radius);
-  background:#fff;color:var(--ink);padding:7px 11px;font-size:15px;line-height:1;cursor:pointer;
+  display:none;border:1px solid var(--line);border-radius:var(--radius-pill);
+  background:#fff;color:var(--ink);padding:7px 13px;font-size:15px;line-height:1;cursor:pointer;
 }
 
 /* ============================================================
@@ -153,7 +154,7 @@ button,select{font-family:inherit;}
 .price{font-family:var(--font-display);font-size:28px;font-weight:800;color:var(--red);}
 .price-note{
   font-size:11px;color:var(--ink);font-weight:700;background:var(--amber);
-  border-radius:var(--radius);padding:4px 10px;
+  border-radius:var(--radius-pill);padding:5px 12px;
 }
 
 /* ============================================================
@@ -162,16 +163,16 @@ button,select{font-family:inherit;}
 .btn-primary,
 .btn-primary:focus-visible{
   font-family:var(--font-display);
-  background:var(--red);color:#fff;border:1px solid var(--red);border-radius:var(--radius);
-  padding:14px 30px;font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+  background:var(--red);color:#fff;border:1px solid var(--red);border-radius:var(--radius-pill);
+  padding:14px 32px;font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
   cursor:pointer;transition:background .15s ease;
 }
 .btn-primary:hover,.btn-primary:active{background:var(--red-dark);border-color:var(--red-dark);color:#fff;}
 
 .btn-secondary{
   font-family:var(--font-display);
-  background:#fff;color:var(--ink);border:1px solid var(--line);border-radius:var(--radius);
-  padding:14px 30px;font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+  background:#fff;color:var(--ink);border:1px solid var(--line);border-radius:var(--radius-pill);
+  padding:14px 32px;font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
   cursor:pointer;
 }
 .btn-secondary:hover{border-color:var(--ink);}
@@ -188,7 +189,7 @@ button,select{font-family:inherit;}
 .pill-group{display:flex;flex-wrap:wrap;gap:8px;}
 .pill{
   font-family:var(--font-display);
-  border:1px solid var(--line);border-radius:var(--radius);padding:8px 14px;
+  border:1px solid var(--line);border-radius:var(--radius-pill);padding:8px 16px;
   font-size:12px;font-weight:700;background:#fff;color:var(--text);
   cursor:pointer;transition:all .12s ease;
 }
@@ -295,7 +296,7 @@ button,select{font-family:inherit;}
 .why-support{font-size:14.5px;line-height:1.75;color:var(--text);max-width:70ch;margin-top:14px;}
 .four-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:32px;}
 .box{
-  border:1px solid var(--line-soft);border-top:3px solid var(--red);border-radius:var(--radius);
+  border:1px solid var(--line-soft);border-radius:var(--radius);
   padding:22px 18px;display:flex;flex-direction:column;gap:10px;min-height:190px;background:#fff;
 }
 .box .num{font-family:var(--font-display);font-size:10px;font-weight:700;color:var(--red);letter-spacing:.1em;}
@@ -322,7 +323,7 @@ button,select{font-family:inherit;}
 .drawer{width:420px;max-width:92%;background:#fff;border-left:1px solid var(--line);}
 .drawer-head{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--line);flex-shrink:0;}
 .drawer-head h3{font-size:16px;text-transform:uppercase;letter-spacing:.04em;}
-.drawer-close{width:28px;height:28px;border:1px solid var(--line);border-radius:var(--radius);background:#fff;cursor:pointer;font-size:14px;color:var(--ink);line-height:1;}
+.drawer-close{width:28px;height:28px;border:1px solid var(--line);border-radius:50%;background:#fff;cursor:pointer;font-size:14px;color:var(--ink);line-height:1;}
 .drawer-close:hover{border-color:var(--red);color:var(--red);}
 .drawer-body{padding:20px 22px 40px;overflow-y:auto;}
 .step{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid var(--line-soft);}
@@ -343,7 +344,7 @@ button,select{font-family:inherit;}
 .drawer-video .video-wrap{aspect-ratio:16/9;}
 .whatsapp-btn{
   font-family:var(--font-display);
-  width:100%;border:none;border-radius:var(--radius);background:var(--green);color:#fff;padding:13px;
+  width:100%;border:none;border-radius:var(--radius-pill);background:var(--green);color:#fff;padding:14px;
   font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;cursor:pointer;
   display:flex;align-items:center;justify-content:center;gap:8px;
 }
@@ -377,7 +378,7 @@ button,select{font-family:inherit;}
   flex:1;min-width:0;border:1px solid var(--line);border-radius:var(--radius);padding:10px 8px;
   font-size:12px;font-weight:600;background:#fff;color:var(--ink);
 }
-.sticky-bar .btn-primary{padding:12px 18px;font-size:11.5px;white-space:nowrap;}
+.sticky-bar .btn-primary{padding:12px 22px;font-size:11.5px;white-space:nowrap;}
 
 /* ============================================================
    RESPONSIVE — breakpoints mirror the wireframe
@@ -426,7 +427,7 @@ button,select{font-family:inherit;}
   .drawer{width:100%;max-width:100%;}
   .footer{padding:28px 16px;}
   .footer .cols{gap:28px;}
-  .btn-primary,.btn-secondary{padding:13px 20px;font-size:12px;flex:1;text-align:center;}
+  .btn-primary,.btn-secondary{padding:13px 22px;font-size:12px;flex:1;text-align:center;}
 
   /* Buy Now becomes a bottom sticky bar on mobile — key conversion CTA */
   .sticky-bar{display:flex;}
