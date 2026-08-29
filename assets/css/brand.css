@@ -155,10 +155,6 @@ button,select{font-family:inherit;}
    PRICE
    ============================================================ */
 .price{font-family:var(--font-display);font-size:28px;font-weight:600;color:var(--red);}
-.price-note{
-  font-size:11px;color:var(--ink);font-weight:700;background:var(--amber);
-  border-radius:var(--radius-pill);padding:5px 12px;
-}
 
 /* ============================================================
    BUTTONS & LINKS
@@ -206,6 +202,15 @@ button,select{font-family:inherit;}
   cursor:pointer;transition:all .12s ease;
 }
 .pill.selected{background:var(--red);border-color:var(--red);color:#fff;}
+.pill{transition:background .18s ease,border-color .18s ease,color .18s ease,transform .18s ease;}
+.pill:active{transform:scale(.97);}
+/* JS adds this on click so the pop only fires on a real pick, not on page load */
+.pill.pill-pop{animation:pillPop .3s cubic-bezier(.34,1.4,.64,1);}
+@keyframes pillPop{
+  0%{transform:scale(.94);}
+  55%{transform:scale(1.04);}
+  100%{transform:scale(1);}
+}
 .cta-block .pill{border-color:rgba(255,255,255,.3);background:transparent;color:#fff;}
 .cta-block .pill:hover{border-color:rgba(255,255,255,.7);}
 .cta-block .pill.selected{background:var(--red);border-color:var(--red);color:#fff;}
@@ -274,13 +279,22 @@ button,select{font-family:inherit;}
 }
 .bento-item.lg{
   grid-column:span 2;grid-row:span 2;
+  position:relative;overflow:hidden;
   padding:24px;padding-right:320px;
   justify-content:space-between;
-  background:#fff url('../img/bento-lead.jpg') no-repeat right center;
-  background-size:cover;
 }
+/* The photo is a real element rather than a background so it can sit beside the
+   copy on wide screens and go full-bleed under it on narrow ones. */
+.lead-photo{
+  position:absolute;inset:0;z-index:0;
+  width:100%;height:100%;max-width:none;
+  object-fit:cover;object-position:right center;pointer-events:none;
+}
+/* copy sits over the photo's flat left side, as in the design */
+.bento-item.lg > .text-block,.bento-item.lg > .icon{position:relative;z-index:1;}
 .bento-item.lg .text-block{display:flex;flex-direction:column;gap:8px;}
 .bento-item.lg .icon{width:64px;height:64px;margin-top:auto;}
+.bento-item{cursor:default;}
 .bento-item .icon{
   width:48px;height:48px;flex-shrink:0;display:block;
 }
@@ -346,18 +360,19 @@ button,select{font-family:inherit;}
 .video-wrap{
   position:relative;overflow:hidden;
   width:100%;border:1px solid var(--line-soft);border-radius:var(--radius);aspect-ratio:16/7;
-  background:var(--surface) url('../img/video-poster.jpg') no-repeat center/cover;
+  background:var(--surface);
   cursor:pointer;
   display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;
 }
-.video-wrap::before{content:"";position:absolute;inset:0;background:rgba(34,32,34,.28);}
+.video-wrap.has-poster{background:var(--surface) url('../img/video-poster.jpg') no-repeat center/cover;}
+.video-wrap.has-poster::before{content:"";position:absolute;inset:0;background:rgba(34,32,34,.28);}
 .video-wrap .play-btn,.video-wrap .vlabel{position:relative;z-index:1;}
-.video-wrap .vlabel{color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.4);}
 .play-btn{
   width:56px;height:56px;border:none;border-radius:50%;background:var(--red);color:#fff;
   display:flex;align-items:center;justify-content:center;font-size:16px;
 }
 .video-wrap .vlabel{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--slate);}
+.video-wrap.has-poster .vlabel{color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.55);}
 
 /* ============================================================
    HOW-TO-PURCHASE DRAWER (Bootstrap offcanvas, brand-skinned)
@@ -442,7 +457,7 @@ button,select{font-family:inherit;}
   .section{padding:44px 24px;}
   .cta-block{padding:44px 24px;}
   .bento{grid-template-columns:repeat(2,1fr);grid-auto-rows:minmax(170px,auto);}
-  .bento-item.lg{grid-column:span 2;grid-row:span 1;padding-right:350px;background-size:auto 100%;}
+  .bento-item.lg{grid-column:span 2;grid-row:span 1;padding-right:350px;}
   .why-layout{grid-template-columns:1fr;gap:28px;}
   .why-illustration{max-width:560px;margin:0 auto;}
   .bento-item.contrast{grid-column:span 2;}
@@ -464,8 +479,15 @@ button,select{font-family:inherit;}
   .bento{grid-template-columns:1fr;grid-auto-rows:auto;}
   .bento-item.lg,.bento-item.contrast{grid-column:span 1;grid-row:span 1;}
   /* no room for the photo alongside the copy — drop it to the card's foot */
-  .bento-item.lg{padding:18px;padding-bottom:180px;background-position:right bottom;background-size:auto 170px;}
+  .bento-item.lg{padding:18px;padding-bottom:0;}
   .bento-item.lg .icon{margin-top:0;}
+  /* full-bleed to the card edges, negating the card's own side padding */
+  .lead-photo{
+    position:static;display:block;
+    width:calc(100% + 36px);height:auto;
+    margin:16px -18px 0;
+    object-fit:contain;
+  }
   .bento-item{min-height:120px;}
   .pill{font-size:11px;padding:8px 12px;width:100%;text-align:left;}
   .four-grid{grid-template-columns:1fr;}
@@ -486,6 +508,21 @@ button,select{font-family:inherit;}
   /* Buy Now becomes a bottom sticky bar on mobile — key conversion CTA */
   .sticky-bar{display:flex;}
   body{padding-bottom:66px;} /* clear the fixed bar */
+}
+
+/* ============================================================
+   REVEAL ON SCROLL — every band below the first fold
+   ============================================================ */
+.reveal{opacity:0;transform:translateY(24px);}
+.reveal.is-visible{
+  opacity:1;transform:none;
+  transition:opacity .6s ease,transform .6s cubic-bezier(.22,.61,.36,1);
+}
+/* Without JS nothing should stay invisible. */
+html:not(.js) .reveal{opacity:1;transform:none;}
+
+@media (prefers-reduced-motion: reduce){
+  .reveal,.reveal.is-visible{opacity:1;transform:none;transition:none;}
 }
 
 @media (prefers-reduced-motion: reduce){

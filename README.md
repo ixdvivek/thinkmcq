@@ -45,10 +45,25 @@ mobile-only sticky Buy Now bar below 520px.
 The three exam selectors — hero dropdown, CTA pills, sticky bar — are bound
 to one value, so a choice made in any of them survives a scroll to another.
 
+## Motion
+
+Handled in `assets/js/app.js`, all of it gated on `prefers-reduced-motion`:
+
+- **Reveal on scroll** — every band below the first fold fades up as it enters
+  the viewport (`.reveal` / `.is-visible`, driven by an IntersectionObserver).
+  A `js` class on `<html>` means the content is never stranded invisible if the
+  script fails.
+- **Bento icons** are static PNGs; hovering (or keyboard-focusing) a card swaps
+  in the animated GIF, and leaving swaps back, which also rewinds it. The GIF is
+  only fetched on first hover, so the page doesn't pay for 1.9MB up front.
+- **Exam chips** pop briefly when picked — applied by script on click, so it
+  never fires for the default selection on page load.
+
 ## Wiring up for real
 
 These are the deliberate placeholders:
 
+- **Video** is a poster frame with an inert play button — no embed yet.
 - **Buy Now** navigates to `/cart/add?package=D33&exam=<code>` — point this
   at the real add-to-cart endpoint in `assets/js/app.js`.
 - **Carousel slides** are styled text panels; drop in real package imagery.

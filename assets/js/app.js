@@ -7,6 +7,8 @@
 (function () {
   'use strict';
 
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
   /* ---- mobile nav toggle ------------------------------------ */
   var navToggle = document.getElementById('navToggle');
   var topnav = document.getElementById('topnav');
@@ -51,8 +53,18 @@
       if (!pill || !group.contains(pill)) { return; }
       selectedExam = pill.dataset.value;
       renderExam(null);
+      pop(pill);
     });
   });
+
+  /* Restart the select animation on the pill that was just chosen. Re-adding the
+     class needs a reflow between remove and add, or the animation never replays. */
+  function pop(pill) {
+    if (reduceMotion.matches) { return; }
+    pill.classList.remove('pill-pop');
+    void pill.offsetWidth;
+    pill.classList.add('pill-pop');
+  }
 
   renderExam(null);
 
@@ -79,6 +91,38 @@
     btn.addEventListener('click', function () {
       window.location.href = '/cart/add?package=D33&exam=' + encodeURIComponent(selectedExam);
     });
+  });
+
+  /* ---- reveal on scroll -------------------------------------
+     Every band below the first fold fades and lifts into place the
+     first time it comes near the viewport.                      */
+  var revealables = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+  if (!('IntersectionObserver' in window) || reduceMotion.matches) {
+    revealables.forEach(function (el) { el.classList.add('is-visible'); });
+  } else {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) { return; }
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      });
+    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.05 });
+    revealables.forEach(function (el) { observer.observe(el); });
+  }
+
+  /* ---- bento icons: still by default, animated on card hover --
+     The GIF is only fetched the first time a card is hovered, and
+     swapping back to the PNG both stops and rewinds the loop.    */
+  document.querySelectorAll('.bento-item').forEach(function (card) {
+    var img = card.querySelector('.icon img[data-gif]');
+    if (!img) { return; }
+    var still = img.getAttribute('src');
+    var play = function () { if (!reduceMotion.matches) { img.src = img.dataset.gif; } };
+    var stop = function () { img.src = still; };
+    card.addEventListener('mouseenter', play);
+    card.addEventListener('mouseleave', stop);
+    card.addEventListener('focusin', play);
+    card.addEventListener('focusout', stop);
   });
 
   /* ---- video placeholders -----------------------------------
