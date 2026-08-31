@@ -1,0 +1,188 @@
+#!/usr/bin/env python3
+"""
+Build the integration bundle for dropping the package page into the live site.
+
+    python3 tools/build-integration.py
+
+Reads  : index.html, assets/css/brand.css, assets/js/app.js
+Writes : integration/thinkmcq-package.{css,js}, integration/package-page.html
+
+Everything is namespaced under .tmcq-pkg so no rule or selector can reach the
+host site's navbar, footer, or any other page.
+"""
+import re, pathlib
+
+NS = '.tmcq-pkg'
+ROOT = pathlib.Path(__file__).resolve().parent.parent
+OUT = ROOT / 'integration'
+OUT.mkdir(exist_ok=True)
+
+# chrome the live site already owns — never ship styles for it
+DROP = ('.topbar', '.topnav', '.top-actions', '.cart-box', '.nav-toggle', '.footer')
+ELEMENT_ROOT = {'html','body','p','a','button','select','h1','h2','h3','h4','h5','h6','img','ul','li','input'}
+# may be relocated out of the wrapper by the host, so also match on self
+SELF_OK = ('.drawer', '.sticky-bar', '.offcanvas')
+# parent site defines bare .media and .price; rename ours to avoid inheriting them
+RENAME = {'media': 'pkg-media', 'price': 'pkg-price'}
+
+# ---------------------------------------------------------------- CSS
+css_src = (ROOT / 'assets/css/brand.css').read_text(encoding='utf-8')
+
+# NB: the URL contains semicolons (wght@600;700;800), so match the whole url(...)
+m = re.search(r"@import\s+url\((['\"]?)(.*?)\1\)\s*;", css_src, flags=re.S)
+font_url = m.group(2) if m else ''
+css_src = re.sub(r"@import\s+url\((['\"]?).*?\1\)\s*;\s*", '', css_src, flags=re.S)
+assert '@import' not in css_src, 'font @import was not fully removed'
+css_src = re.sub(r'/\*.*?\*/', '', css_src, flags=re.S)
+
+def split_sel(s):
+    out, depth, cur = [], 0, ''
+    for ch in s:
+        if ch in '([': depth += 1
+        elif ch in ')]': depth -= 1
+        if ch == ',' and depth == 0:
+            out.append(cur.strip()); cur = ''
+        else: cur += ch
+    if cur.strip(): out.append(cur.strip())
+    return out
+
+def scope_one(sel):
+    sel = ' '.join(sel.split())
+    if not sel: return None
+    if sel == '*':                       return f'{NS}, {NS} *'
+    if sel in (':root', 'body'):         return NS
+    if sel.startswith('html:not(.js)'):  return sel.replace('html:not(.js) ', f'html:not(.js) {NS} ', 1)
+    if sel.startswith(':'):              return f'{NS} {sel}'
+    head = re.split(r'[\s>+~]', sel)[0]
+    if re.sub(r'[:\[].*$', '', head) in ELEMENT_ROOT: return f'{NS} {sel}'
+    if any(sel.startswith(p) for p in SELF_OK):       return f'{NS} {sel}, {NS}{sel}'
+    return f'{NS} {sel}'
+
+def process(css):
+    out, i, n, dropped = [], 0, len(css), []
+    while i < n:
+        br = css.find('{', i)
+        if br == -1:
+            out.append(css[i:]); break
+        prelude = css[i:br].strip()
+        depth, j = 1, br + 1
+        while j < n and depth:
+            if css[j] == '{': depth += 1
+            elif css[j] == '}': depth -= 1
+            j += 1
+        body = css[br+1:j-1]
+        if prelude.startswith(('@keyframes', '@font-face')):
+            out.append(prelude + '{' + body + '}\n')
+        elif prelude.startswith(('@media', '@supports')):
+            inner, d = process(body); dropped += d
+            out.append(prelude + '{\n' + inner + '}\n')
+        else:
+            sels = split_sel(prelude)
+            keep = [s for s in sels if not any(' '.join(s.split()).startswith(p) for p in DROP)]
+            dropped += [s for s in sels if s not in keep]
+            if keep:
+                out.append(',\n'.join(x for x in map(scope_one, keep) if x) + '{' + body + '}\n')
+        i = j
+    return ''.join(out), dropped
+
+css, dropped = process(css_src)
+for old, new in RENAME.items():
+    css = re.sub(r'\.' + old + r'(?![\w-])', '.' + new, css)
+
+css = css.replace('  --bs-body-font-family:', """  /* Stacking, set against the parent site's real values:
+     .navigation-fixed-wrapper 19998 · .nav-overlay-panel 19999
+     · .navigation-portrait .nav-menus-wrapper 20000 · .scrollup 99999 */
+  --tmcq-z-sticky:19990;
+  --tmcq-z-backdrop:20050;
+  --tmcq-z-drawer:20060;
+
+  --bs-body-font-family:""", 1)
+css = css.replace('position:fixed;bottom:0;left:0;right:0;z-index:20;',
+                  'position:fixed;bottom:0;left:0;right:0;z-index:var(--tmcq-z-sticky);')
+
+css += f"""
+/* Bootstrap parks .offcanvas at z-index 1045, which on this site sits UNDER
+   .navigation-fixed-wrapper (19998), so the drawer would be covered.
+   .offcanvas-backdrop is appended to <body>, outside this scope — see report. */
+{NS} .drawer,{NS}.drawer{{z-index:var(--tmcq-z-drawer);}}
+
+/* The parent sheet has unscoped a:hover / button:focus rules that would
+   otherwise reach inside this container. */
+{NS} a:hover{{color:inherit;}}
+{NS} button:focus{{outline:none;}}
+{NS} button:focus-visible{{outline:2px solid var(--red);outline-offset:2px;}}
+"""
+
+header = f"""/* ============================================================
+   thinkMCQ — package page styles, SCOPED FOR INTEGRATION
+   GENERATED by tools/build-integration.py — do not hand-edit.
+   Edit assets/css/brand.css and re-run the script.
+
+   Every rule is namespaced under `{NS}`.
+   Not shipped (the live site owns it): {' '.join(DROP)}
+   Renamed to dodge the parent's bare rules: {RENAME}
+
+   FONTS: the @import was stripped; thinkmcq.css already loads
+   Montserrat 400-800 + Lato 400/700/900. Lato 600 is NOT in the
+   parent's list — see the collision report.
+   Original import: {font_url}
+   ============================================================ */
+
+"""
+(OUT / 'thinkmcq-package.css').write_text(header + css, encoding='utf-8')
+
+# ---------------------------------------------------------------- JS
+js = (ROOT / 'assets/js/app.js').read_text(encoding='utf-8')
+js = js.replace("  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');",
+"""  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  /* Confine every lookup to the package container: unscoped selectors would
+     otherwise hijack matching markup elsewhere on the host site. */
+  var root = document.querySelector('.tmcq-pkg');
+  if (!root) { return; }""", 1)
+js = js.replace('document.querySelectorAll(', 'root.querySelectorAll(')
+js = js.replace("document.getElementById('packageCarousel')", "root.querySelector('#packageCarousel')")
+js = re.sub(r"  /\* ---- mobile nav toggle -+ \*/\n.*?\n  }\n\n", "", js, flags=re.S)
+js = js.replace("'.media'", "'.pkg-media'")
+assert "document.getElementById" not in js and js.count('document.querySelector(') == 1
+(OUT / 'thinkmcq-package.js').write_text(js, encoding='utf-8')
+
+# ---------------------------------------------------------------- HTML
+src = (ROOT / 'index.html').read_text(encoding='utf-8')
+main = re.search(r'<main id="main">(.*?)</main>', src, re.S).group(1).rstrip()
+sticky = '<div class="sticky-bar"' + src.split('<div class="sticky-bar"')[1].split('<!-- =')[0].rstrip()
+drawer = re.search(r'(<aside class="offcanvas.*?</aside>)', src, re.S).group(1)
+
+def fix(h):
+    for old, new in RENAME.items():
+        h = re.sub(r'class="' + old + r'"', f'class="{new}"', h)
+    return h.replace('assets/img/', '{{ASSET_BASE}}')
+
+main, sticky, drawer = fix(main), fix(sticky), fix(drawer)
+(OUT / 'package-page.html').write_text(f'''<!-- ============================================================
+     thinkMCQ — Package page content
+     Drop BETWEEN the existing navbar and footer of the
+     medical-oncology template. Do not modify either.
+
+     Once, in <head>, AFTER the site's own stylesheets:
+       <link rel="stylesheet" href="/assets/css/thinkmcq-package.css">
+     Before </body>, after Bootstrap's bundle:
+       <script src="/assets/js/thinkmcq-package.js" defer></script>
+
+     Replace {{{{ASSET_BASE}}}} with the real asset path, e.g. /assets/img/
+     ============================================================ -->
+<script>document.documentElement.classList.add('js');</script>
+
+<div class="tmcq-pkg">
+{main}
+
+  <!-- mobile-only sticky conversion bar -->
+  {sticky}
+
+  <!-- "How to purchase" drawer -->
+  {drawer}
+</div><!-- /.tmcq-pkg -->
+''', encoding='utf-8')
+
+print(f"OK  css={len(header+css)}b  js={len(js)}b  html ok")
+print("dropped host-owned selectors:", len(set(dropped)))

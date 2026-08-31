@@ -1,0 +1,376 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Integration harness</title>
+<link rel="stylesheet" href="bootstrap.min.css">
+<link rel="stylesheet" href="parent-thinkmcq.css">
+<link rel="stylesheet" href="../integration/thinkmcq-package.css">
+</head><body>
+
+<!-- ===== CONTROL CHROME: uses the parent site's own class names.
+     If any of these change appearance, my stylesheet has leaked. ===== -->
+<header id="ctl-nav" class="navigation-fixed-wrapper">
+  <div class="nav-toggle"></div>
+  <div class="container"><h1>Parent Navbar</h1>
+  <p>Body copy in the parent chrome.</p><a href="#">A parent link</a></div>
+</header>
+
+<section id="ctl-generic">
+  <div class="hero"><h2>hero</h2></div>
+  <div class="section"><h3>section</h3></div>
+  <div class="info">info</div>
+  <div class="box">box</div>
+  <div class="bento">bento</div>
+  <div class="four-grid">four-grid</div>
+  <div class="cta-block">cta-block</div>
+  <div class="pill">pill</div>
+  <div class="media">media (parent media object)</div>
+  <div class="price">price</div>
+  <div class="card">card</div>
+  <div class="shell">shell</div>
+  <div class="step">step</div>
+  <div class="drawer">drawer</div>
+  <div class="reveal">reveal</div>
+</section>
+
+<!-- ============================================================
+     thinkMCQ — Package page content
+     Drop this BETWEEN the existing navbar and footer of the
+     medical-oncology template. Do not modify either of those.
+
+     Requires, once, in <head> (after the site's own stylesheets
+     so it wins ties on equal specificity):
+       <link rel="stylesheet" href="/assets/css/thinkmcq-package.css">
+     and before </body>:
+       <script src="/assets/js/thinkmcq-package.js" defer></script>
+
+     Replace ../assets/img/ with the real asset path, e.g. /assets/img/
+     ============================================================ -->
+<!-- ============================================================
+     thinkMCQ — Package page content
+     Drop BETWEEN the existing navbar and footer of the
+     medical-oncology template. Do not modify either.
+
+     Once, in <head>, AFTER the site's own stylesheets:
+       <link rel="stylesheet" href="/assets/css/thinkmcq-package.css">
+     Before </body>, after Bootstrap's bundle:
+       <script src="/assets/js/thinkmcq-package.js" defer></script>
+
+     Replace ../assets/img/ with the real asset path, e.g. /assets/img/
+     ============================================================ -->
+<script>document.documentElement.classList.add('js');</script>
+
+<div class="tmcq-pkg">
+
+
+    <!-- ================= HERO / PRODUCT ================= -->
+    <section class="hero">
+      <div class="pkg-media">
+        <div class="carousel-frame">
+          <div id="packageCarousel" class="carousel slide">
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <div class="pkg-slide photo">
+                  <img src="../assets/img/hero-carousel-1.jpg" alt="Paediatric surgeon with a young patient" width="1200" height="1500">
+                </div>
+              </div>
+              <div class="carousel-item">
+                <div class="pkg-slide">
+                  <span class="slide-tag">Mock tests</span>
+                  <span class="slide-title">Unlimited real-time mock exams</span>
+                  <span class="slide-sub">Timed, council-specific, with explanations and referral material.</span>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <div class="pkg-slide">
+                  <span class="slide-tag">Analytics</span>
+                  <span class="slide-title">Precision AI performance analytics</span>
+                  <span class="slide-sub">Weakness tracking and time management, question by question.</span>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <div class="pkg-slide">
+                  <span class="slide-tag">Access</span>
+                  <span class="slide-title">Full 3-month premium access</span>
+                  <span class="slide-sub">Unlimited practice modules for the entire duration.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="car-arrow prev" type="button" data-bs-target="#packageCarousel" data-bs-slide="prev" aria-label="Previous image">&lsaquo;</button>
+          <button class="car-arrow next" type="button" data-bs-target="#packageCarousel" data-bs-slide="next" aria-label="Next image">&rsaquo;</button>
+        </div>
+        <div class="car-dots" id="carDots">
+          <button class="dot active" type="button" data-bs-target="#packageCarousel" data-bs-slide-to="0" aria-label="Go to image 1" aria-current="true"></button>
+          <button class="dot" type="button" data-bs-target="#packageCarousel" data-bs-slide-to="1" aria-label="Go to image 2"></button>
+          <button class="dot" type="button" data-bs-target="#packageCarousel" data-bs-slide-to="2" aria-label="Go to image 3"></button>
+          <button class="dot" type="button" data-bs-target="#packageCarousel" data-bs-slide-to="3" aria-label="Go to image 4"></button>
+        </div>
+      </div>
+
+      <div class="info">
+        <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+          <a href="/packages">Packages</a><span class="sep" aria-hidden="true">›</span>
+          <a href="/packages/doctors">Doctors</a><span class="sep" aria-hidden="true">›</span>
+          <span class="current" aria-current="page">Pediatric Surgery</span>
+        </nav>
+        <span class="eyebrow">Doctors · Code: D33</span>
+        <h1>Pediatric Surgery</h1>
+        <div class="price-row">
+          <span class="pkg-price">$166</span>
+        </div>
+        <p class="short-desc">Authentic Pediatric Surgery MCQ study material for the Gulf's Medical Council exams — the world's largest AI-reconstructed question bank, covering DHA, DHCC, MOH (UAE), HAAD, OMSB, SCFHS/SLE, QCHP, MOH (Kuwait), NHRA and SHCC.</p>
+
+        <div class="license-select">
+          <label class="field-label" for="examSelect">Select medical council exam</label>
+          <select class="license-dropdown" id="examSelect" data-exam-sync>
+            <option value="DHA">DHA — Dubai (Dubai Health Authority)</option>
+            <option value="DHCC">DHCC — Dubai (Dubai Healthcare City Authority)</option>
+            <option value="MOH-UAE">MOH – UAE (Ministry of Health)</option>
+            <option value="HAAD">HAAD — Abu Dhabi (Health Authority–Abu Dhabi)</option>
+            <option value="OMSB">OMSB — Oman (Oman Medical Specialty Board)</option>
+            <option value="SCFHS">SCFHS/SLE — Saudi Arabia (Saudi Commission for Health Specialties)</option>
+            <option value="QCHP">QCHP — Qatar (Qatar Council for Healthcare Practitioners)</option>
+            <option value="MOH-KW">MOH – Kuwait (Ministry of Health)</option>
+            <option value="NHRA">NHRA — Bahrain (National Health Regulatory Authority)</option>
+            <option value="SHCC">SHCC — Sharjah (Sharjah Healthcare City)</option>
+          </select>
+        </div>
+
+        <div class="cta-row">
+          <button class="btn-primary" type="button" data-buy>Buy Now</button>
+          <a class="btn-whatsapp" href="https://wa.me/971000000000" target="_blank" rel="noopener">✆ WhatsApp Us</a>
+          <button class="text-link" type="button" data-bs-toggle="offcanvas" data-bs-target="#howToBuy" aria-controls="howToBuy">How to purchase?</button>
+        </div>
+
+        <div class="trust-row">
+          <span>100% council-sourced material</span>
+          <span>3-month premium access</span>
+          <span>Instant login after payment</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= WHAT'S INSIDE (BENTO) ================= -->
+    <section class="reveal section" id="whats-inside">
+      <div class="section-head">
+        <h2>What's inside the package?</h2>
+      </div>
+      <div class="bento">
+        <div class="bento-item lg">
+          <div class="text-block">
+            <h3>World's largest AI-powered bank with dynamic scenario reconstruction</h3>
+            <p>Static MCQs transformed into dynamic clinical cases mirroring the authentic latest patterns for all Gulf Medical Councils.</p>
+          </div>
+          <span class="icon" aria-hidden="true"><img src="../assets/img/bento-lead-icon.png" alt="" width="64" height="64"></span>
+          <img class="lead-photo" src="../assets/img/bento-lead.jpg" alt="" width="1400" height="709">
+        </div>
+        <div class="bento-item">
+          <span class="icon" aria-hidden="true"><img src="../assets/img/icon-authentic.png" data-gif="../assets/img/icon-authentic.gif" alt="" width="48" height="48" loading="lazy"></span>
+          <h3>100% authentic, council-sourced material</h3>
+          <p>Reconstructed by AI into 5 diverse clinical scenarios to master every potential exam variation.</p>
+        </div>
+        <div class="bento-item">
+          <span class="icon" aria-hidden="true"><img src="../assets/img/icon-expert.png" data-gif="../assets/img/icon-expert.gif" alt="" width="48" height="48" loading="lazy"></span>
+          <h3>Expert strategic intelligence</h3>
+          <p>Logic-based exam success tips from our in-house specialist panel.</p>
+        </div>
+        <div class="bento-item">
+          <span class="icon" aria-hidden="true"><img src="../assets/img/icon-analytics.png" data-gif="../assets/img/icon-analytics.gif" alt="" width="48" height="48" loading="lazy"></span>
+          <h3>Precision AI analytics</h3>
+          <p>Weakness tracking and time-management insights, question by question.</p>
+        </div>
+        <div class="bento-item">
+          <span class="icon" aria-hidden="true"><img src="../assets/img/icon-mocks.png" data-gif="../assets/img/icon-mocks.gif" alt="" width="48" height="48" loading="lazy"></span>
+          <h3>Unlimited real-time mock tests</h3>
+          <p>Customised to your medical council exam, with built-in timer, explanations and referral material.</p>
+        </div>
+        <div class="bento-item">
+          <span class="icon" aria-hidden="true"><img src="../assets/img/icon-analysis.png" data-gif="../assets/img/icon-analysis.gif" alt="" width="48" height="48" loading="lazy"></span>
+          <h3>Detailed, micro-managed analysis</h3>
+          <p>Time and duration consumed per question, tracked automatically.</p>
+        </div>
+        <div class="bento-item">
+          <span class="icon" aria-hidden="true"><img src="../assets/img/icon-access.png" data-gif="../assets/img/icon-access.gif" alt="" width="48" height="48" loading="lazy"></span>
+          <h3>Full 3-month premium access</h3>
+          <p>Unlimited practice modules for the entire duration.</p>
+        </div>
+        <div class="bento-item contrast">
+          <div class="icon" aria-hidden="true">✉</div>
+          <span class="kicker-sm">Need help deciding?</span>
+          <h3>Our team is here for any assistance or technical support</h3>
+          <a class="mail-link" href="mailto:info@thinkmcq.com">info@thinkmcq.com</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CTA BLOCK ================= -->
+    <section class="reveal cta-block">
+      <h2>We assure you to sharpen your judgment skill, analysis skill and time management — for the easy cracking of exams.</h2>
+      <p class="sub">What are you waiting for? You are just a click away from your dream career!</p>
+
+      <div class="license-select">
+        <span class="field-label" id="pillLabel">Select medical council exam</span>
+        <div class="pill-group" role="radiogroup" aria-labelledby="pillLabel" data-exam-pills>
+          <button class="pill selected" type="button" role="radio" aria-checked="true" data-value="DHA">DHA — Dubai (Dubai Health Authority)</button>
+          <button class="pill" type="button" role="radio" aria-checked="false" data-value="DHCC">DHCC — Dubai (Dubai Healthcare City Authority)</button>
+          <button class="pill" type="button" role="radio" aria-checked="false" data-value="MOH-UAE">MOH – UAE (Ministry of Health)</button>
+          <button class="pill" type="button" role="radio" aria-checked="false" data-value="HAAD">HAAD — Abu Dhabi (Health Authority–Abu Dhabi)</button>
+          <button class="pill" type="button" role="radio" aria-checked="false" data-value="OMSB">OMSB — Oman (Oman Medical Specialty Board)</button>
+          <button class="pill" type="button" role="radio" aria-checked="false" data-value="SCFHS">SCFHS/SLE — Saudi Arabia (Saudi Commission for Health Specialties)</button>
+          <button class="pill" type="button" role="radio" aria-checked="false" data-value="QCHP">QCHP — Qatar (Qatar Council for Healthcare Practitioners)</button>
+          <button class="pill" type="button" role="radio" aria-checked="false" data-value="MOH-KW">MOH – Kuwait (Ministry of Health)</button>
+          <button class="pill" type="button" role="radio" aria-checked="false" data-value="NHRA">NHRA — Bahrain (National Health Regulatory Authority)</button>
+          <button class="pill" type="button" role="radio" aria-checked="false" data-value="SHCC">SHCC — Sharjah (Sharjah Healthcare City)</button>
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <button class="btn-primary" type="button" data-buy>Buy Now</button>
+        <a class="btn-whatsapp" href="https://wa.me/971000000000" target="_blank" rel="noopener">✆ WhatsApp Us</a>
+        <button class="text-link" type="button" data-bs-toggle="offcanvas" data-bs-target="#howToBuy" aria-controls="howToBuy">How to purchase?</button>
+      </div>
+    </section>
+
+    <!-- ================= WHY PURCHASE ================= -->
+    <section class="reveal section" id="why-purchase">
+      <div class="why-layout">
+      <div class="why-col">
+      <div class="section-head" style="margin-bottom:0">
+        <div class="kicker">Why purchase</div>
+        <h2>Access the world's largest AI-powered question bank featuring dynamic scenario reconstruction for the most authentic exam preparation.</h2>
+        <p class="why-support">Leverage our expertise as a leading UAE-headquartered consultant, providing real-time updates on Gulf Medical Council protocols and patterns — and stay ahead with continuous AI updates, so your practice material always mirrors the latest state-of-the-art exam questions and logic.</p>
+      </div>
+
+      <div class="four-grid">
+        <div class="box">
+          <span class="num">01</span>
+          <h3>Study</h3>
+          <p>With accuracy, using 100% verified material prepared by our specialized in-house expert panels for every healthcare department.</p>
+        </div>
+        <div class="box">
+          <span class="num">02</span>
+          <h3>Master</h3>
+          <p>Your specialty with organized, subject-wise modules built entirely on actual previous exam concepts and clinical reasoning.</p>
+        </div>
+        <div class="box">
+          <span class="num">03</span>
+          <h3>Experience</h3>
+          <p>The real exam environment in advance through our AI-driven mock tests, designed to eliminate surprises on test day.</p>
+        </div>
+        <div class="box">
+          <span class="num">04</span>
+          <h3>Gain</h3>
+          <p>The critical mental edge and clinical judgment skills required to walk into your exam with absolute self-confidence.</p>
+        </div>
+      </div>
+      </div><!-- /.why-col -->
+      <img class="why-illustration" src="../assets/img/why-illustration.svg" alt="" width="707" height="555" loading="lazy">
+      </div><!-- /.why-layout -->
+    </section>
+
+    <!-- ================= PACKAGE VIDEO ================= -->
+    <section class="reveal section alt" id="overview-video">
+      <div class="section-head">
+        <h2>Package overview video</h2>
+      </div>
+      <button class="video-wrap has-poster" type="button" data-video="package-overview">
+        <span class="play-btn" aria-hidden="true">▶</span>
+        <span class="vlabel">Watch package overview</span>
+      </button>
+    </section>
+
+  <!-- mobile-only sticky conversion bar -->
+  <div class="sticky-bar" id="stickyBar">
+  <label class="visually-hidden" for="stickyExam">Select medical council exam</label>
+  <select id="stickyExam" data-exam-sync>
+    <option value="DHA">DHA</option>
+    <option value="DHCC">DHCC</option>
+    <option value="MOH-UAE">MOH – UAE</option>
+    <option value="HAAD">HAAD</option>
+    <option value="OMSB">OMSB</option>
+    <option value="SCFHS">SCFHS/SLE</option>
+    <option value="QCHP">QCHP</option>
+    <option value="MOH-KW">MOH – Kuwait</option>
+    <option value="NHRA">NHRA</option>
+    <option value="SHCC">SHCC</option>
+  </select>
+  <button class="btn-primary" type="button" data-buy>Buy Now</button>
+</div>
+
+  <!-- "How to purchase" drawer -->
+  <aside class="offcanvas offcanvas-end drawer" tabindex="-1" id="howToBuy" aria-labelledby="howToBuyTitle">
+  <div class="drawer-head">
+    <h3 id="howToBuyTitle">How to purchase</h3>
+    <button class="drawer-close" type="button" data-bs-dismiss="offcanvas" aria-label="Close">✕</button>
+  </div>
+  <div class="drawer-body">
+
+    <div class="step">
+      <span class="step-num">1</span>
+      <div class="step-body">
+        <p>Choose your desired medical council exam and specialty, then click <strong>Buy Now</strong>.</p>
+        <div class="shot has-image"><img src="../assets/img/shot-license.png" alt="Choosing the exam and clicking Buy Now" loading="lazy"></div>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">2</span>
+      <div class="step-body">
+        <p>Confirm your items in the cart and click <strong>Go to Checkout</strong>.</p>
+        <div class="shot has-image"><img src="../assets/img/shot-cart.png" alt="The cart summary before checkout" loading="lazy"></div>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">3</span>
+      <div class="step-body">
+        <p>Enter your billing details and click <strong>Place Order</strong>.</p>
+        <div class="shot has-image"><img src="../assets/img/shot-billing.png" alt="The billing details form" loading="lazy"></div>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">4</span>
+      <div class="step-body">
+        <p>You'll be redirected to the secured payment gateway to enter your card details and complete payment.</p>
+        <div class="shot has-image"><img src="../assets/img/shot-payment.png" alt="The secured payment gateway" loading="lazy"></div>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">5</span>
+      <div class="step-body">
+        <p>Right after payment, you'll receive an email with your login credentials and receipt.</p>
+        <div class="shot">Screenshot — confirmation email</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">6</span>
+      <div class="step-body">
+        <p>Log in with your username and password and start using the world's largest authentic Gulf Medical Council CBT exam bank.</p>
+        <div class="shot">Screenshot — dashboard login</div>
+      </div>
+    </div>
+
+    <div class="drawer-video">
+      <span class="field-label">Watch: how to purchase</span>
+      <button class="video-wrap" type="button" data-video="how-to-purchase">
+        <span class="play-btn" aria-hidden="true">▶</span>
+        <span class="vlabel">Watch how-to-purchase video</span>
+      </button>
+    </div>
+
+    <a class="whatsapp-btn" href="https://wa.me/971000000000" target="_blank" rel="noopener">✆ &nbsp; Chat with us on WhatsApp</a>
+  </div>
+</aside>
+</div><!-- /.tmcq-pkg -->
+
+
+<footer id="ctl-footer" class="footer">
+  <div class="cols"><strong>Parent Footer</strong><span>Column text</span></div>
+</footer>
+
+<script src="bootstrap.bundle.min.js"></script>
+<script src="../integration/thinkmcq-package.js"></script>
+</body></html>
